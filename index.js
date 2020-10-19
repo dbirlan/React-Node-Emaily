@@ -2,8 +2,12 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send({ bye: 'buddy' });
+  res.send({ bye: 'friend' });
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
+
+// git add .
+// git commit -m ""
+// git push heroku master
