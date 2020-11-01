@@ -11,7 +11,7 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-//Turn an ID into a MongoDB instance
+//Turn an ID into a MongoDB instances
 passport.deserializeUser((id, done) => {
   User.findById(id).then((user) => {
     done(null, user);
