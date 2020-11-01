@@ -25,7 +25,7 @@ passport.use(
       clientSecret: keys.googleClientSecret,
       callbackURL: '/auth/google/callback',
       // proxy property is makes the http become https
-      proxy: true
+      proxy: true,
     },
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ googleId: profile.id }).then((existingUser) => {
@@ -34,7 +34,7 @@ passport.use(
           done(null, existingUser);
         } else {
           // we don't have a user record with this ID, make a new record
-          new User({ googleId: profile.id })
+          new User({ googleId: profile.id, email: profile.emails[0].value })
             .save()
             .then((user) => done(null, user));
         }
