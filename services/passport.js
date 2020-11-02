@@ -11,7 +11,7 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-//Turn an ID into a MongoDB instance
+//Turn an ID into a MongoDB instances
 passport.deserializeUser((id, done) => {
   User.findById(id).then((user) => {
     done(null, user);
@@ -24,6 +24,8 @@ passport.use(
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       callbackURL: '/auth/google/callback',
+      // making proxy property true is makes the http become https (no more google error)
+      proxy: true,
     },
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ googleId: profile.id }).then((existingUser) => {
@@ -32,7 +34,7 @@ passport.use(
           done(null, existingUser);
         } else {
           // we don't have a user record with this ID, make a new record
-          new User({ googleId: profile.id })
+          new User({ googleId: profile.id, email: profile.emails[0].value })
             .save()
             .then((user) => done(null, user));
         }
