@@ -24,7 +24,11 @@ passport.use(
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       callbackURL: '/auth/google/callback',
+<<<<<<< HEAD
       // making proxy property true is makes the http become https (no more error)
+=======
+      // making proxy property true is makes the http become https
+>>>>>>> 6d80c9bd674aef0d0ee1fb83f24e691ae86a24ec
       proxy: true,
     },
     (accessToken, refreshToken, profile, done) => {
