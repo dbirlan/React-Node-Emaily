@@ -24,25 +24,23 @@ passport.use(
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       callbackURL: '/auth/google/callback',
-<<<<<<< HEAD
       // making proxy property true is makes the http become https (no more error)
-=======
-      // making proxy property true is makes the http become https
->>>>>>> 6d80c9bd674aef0d0ee1fb83f24e691ae86a24ec
       proxy: true,
     },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleId: profile.id }).then((existingUser) => {
-        if (existingUser) {
-          // we already have a record with the given profile ID
-          done(null, existingUser);
-        } else {
-          // we don't have a user record with this ID, make a new record
-          new User({ googleId: profile.id, email: profile.emails[0].value })
-            .save()
-            .then((user) => done(null, user));
-        }
-      });
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id });
+
+      if (existingUser) {
+        // we already have a record with the given profile ID
+        done(null, existingUser);
+      } else {
+        // we don't have a user record with this ID, make a new record
+        const user = await new User({
+          googleId: profile.id,
+          email: profile.emails[0].value,
+        }).save();
+        done(null, user);
+      }
     }
   )
 );
