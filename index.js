@@ -16,7 +16,7 @@ app.use(
     // How long until the cookie expires (in ms, so 30 days x 24 ...)
     maxAge: 30 * 24 * 60 * 60 * 1000,
     // Security key
-    keys: [keys.cookieKey]
+    keys: [keys.cookieKey],
   })
 );
 
@@ -28,4 +28,13 @@ require('./routes/authRoutes')(app);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
 
-// git push -u origin main            (for github push)
+if (process.env.NODE_ENV === 'production') {
+  // Exprees will serve up production assets
+  app.use(express.static('client/build'));
+
+  // Express serve up index.html file if it doesn't recognize route
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
